@@ -7,7 +7,14 @@ import 'package:starkiller/app/GameWrapper.dart';
 import 'package:starkiller/app/Starkiller.dart';
 
 void main() async {
-    Flame.images.loadAll(['background.png', 'xwingsprite.png', 'tiefightersprite.png', 'animated_background.gif']);
+    Flame.images.loadAll([
+        'background.png',
+        'blackhole.png',
+        'startbutton.png',
+        'xwingsprite.png',
+        'tiefightersprite.png',
+        'animated_background.gif'
+    ]);
     
     Util flameUtil = Util();
     await flameUtil.fullScreen();

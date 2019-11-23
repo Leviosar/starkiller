@@ -85,8 +85,8 @@ class Enemy extends SpriteComponent implements Starship{
                         if (this.hitbox.contains(bullet.hitbox.bottomCenter)) {
                             forRemoval.add(bullet);
                             this.healthPoints--;
+                            if (this.healthPoints == 0) this.game.scoreboard.score++;
                         }
-                        
                     }
                 );
                 forRemoval.forEach((Bullet bullet) => player.bullets.remove(bullet));
