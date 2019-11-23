@@ -6,6 +6,7 @@ import 'package:starkiller/app/Background.dart';
 import 'package:starkiller/app/Bullet.dart';
 import 'package:starkiller/app/Enemy.dart';
 import 'package:starkiller/app/Starship.dart';
+import 'package:starkiller/app/Wave.dart';
 
 class Starkiller extends BaseGame with PanDetector {
     
@@ -13,8 +14,10 @@ class Starkiller extends BaseGame with PanDetector {
     Background background;
     List<Starship> players = [];
     List<Enemy> enemies = [];
+    Wave currentWave;
+    int difficulty = 3;
 
-    Starkiller() {
+    Starkiller({this.screenSize}) {
         this.setup();
     }
 
@@ -22,47 +25,29 @@ class Starkiller extends BaseGame with PanDetector {
         resize(await Flame.util.initialDimensions());
         this.background = Background(this);
         this.spawnPlayer();
-        this.spawnEnemy();
+        this.spawnWave();
     }
 
     @override 
     void render(Canvas canvas) {
         this.background.render(canvas);
+
         this.players.forEach(
             (Starship player) {
                 player.render(canvas);
                 player.bullets.forEach((Bullet bullet) => bullet.render(canvas));
             }
         );
-
-        this.enemies.forEach(
-            (Enemy enemy) {
-                enemy.render(canvas);
-            }
-        );
+        
+        if (currentWave != null) this.currentWave.render(canvas);
     }
 
     @override
     void update(double time) {
-        if (this.enemies.isEmpty) {
-            this.spawnEnemy();
-        }
-        this.players.forEach(
-            (Starship player) {
-                player.update(time);
-                player.bullets.forEach(
-                    (Bullet bullet) { 
-                        bullet.update(time);
-                        this.enemies.removeWhere(
-                            (Enemy enemy) {
-                                return enemy.hitbox.contains(bullet.hitbox.topCenter);
-                            }
-                        );
-                    }
-                );
-                player.bullets.removeWhere((Bullet bullet) => bullet.isOffScreen());
-            }
-        );
+        this.players.forEach((Starship player) => player.update(time));
+        this.players.removeWhere((Starship player) => player.healthPoints <= 0);
+        if (currentWave != null) this.currentWave.update(time);
+        if (currentWave.boogies.isEmpty) this.spawnWave();
     }
 
     @override
@@ -97,9 +82,8 @@ class Starkiller extends BaseGame with PanDetector {
         );
     }
 
-    void spawnEnemy() {
-        this.enemies.add(
-            Enemy(this)
-        );
+    void spawnWave() {
+        this.currentWave = Wave(this, boogieNumber: this.difficulty);
+        this.difficulty++;
     }
 }

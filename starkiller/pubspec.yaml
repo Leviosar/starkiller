@@ -45,7 +45,7 @@ flutter:
   assets:
    - assets/images/background.png
    - assets/images/animated_background.gif
-   - assets/images/tiefighter.png
+   - assets/images/tiefightersprite.png
    - assets/images/xwingsprite.png
   #  - images/a_dot_ham.jpeg
 

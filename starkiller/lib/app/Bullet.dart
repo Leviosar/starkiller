@@ -4,15 +4,17 @@ import 'package:flame/components/component.dart';
 import 'package:flutter/material.dart';
 import 'package:starkiller/app/Starkiller.dart';
 import 'package:starkiller/app/Starship.dart';
+import 'package:starkiller/app/types/MovePatterns.dart';
 
 class Bullet extends SpriteComponent {
     
     final Starkiller game;
     final Starship player;
+    bool reverse;
     Rect hitbox;
     Paint visual;
 
-    Bullet(this.game, this.player) {
+    Bullet(this.game, this.player, {this.reverse = false}) {
         this.hitbox = Rect.fromLTWH(this.player.hitbox.topCenter.dx, this.player.hitbox.topCenter.dy, 4, 12);
         this.visual = Paint();
         this.visual.color = Colors.red;
@@ -22,7 +24,11 @@ class Bullet extends SpriteComponent {
 
     @override
     void update(double t) {
-        this.hitbox = this.hitbox.translate(0, -10);
+        if (this.reverse) {
+            this.hitbox = this.hitbox.translate(0, 10);
+        } else {
+            this.hitbox = this.hitbox.translate(0, -10);
+        }
     }
 
     @override
